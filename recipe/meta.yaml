@@ -1,43 +1,58 @@
 {% set name = "pymcdm" %}
-{% set version = "1.1.0" %}
+{% set version = "1.2.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/pymcdm-{{ version }}.tar.gz
-  sha256: 537ec492c3a35bc544ec0a68ae747add9fbe369fde8abba4830223839d8f3121
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: eeb69029f1fdbb7a01a18ac58c3f100e7cbf4b51c0fe198e9a2c173470bc7bc0
 
 build:
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
   number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
+    - python
     - pip
-    - python >=3.7
+    - setuptools
+    - wheel
   run:
-    - python >=3.7
+    - python
     - numpy
     - scipy
     - matplotlib-base
+    - tabulate
 
 test:
   imports:
     - pymcdm
-  commands:
-    - pip check
   requires:
     - pip
+    - pytest
+    - pandas
+  source_files:
+    - test
+  commands:
+    - pip check
+    - pytest -v test
 
 about:
   home: https://gitlab.com/shekhand/mcda
-  summary: Python library for Multi-Criteria Decision-Making
   license: MIT
-  license_file:
-    - LICENSE
+  license_file: LICENSE
+  license_family: MIT
+  summary: Python library for Multi-Criteria Decision-Making
+  description: |
+    pymcdm is a universal tool for solving multi-criteria problems related to
+    operations research. It has a comprehensive set of methods for evaluating
+    decision options and determining the relevance of attributes or normalization.
+    In addition, this library has a flexible module for visualization of the
+    obtained results.
+  dev_url: https://gitlab.com/shekhand/mcda
+  doc_url: https://pymcdm.readthedocs.io
 
 extra:
   recipe-maintainers:
